@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جارٍ التحويل...</title>
+</head>
+<body>
+    <script>
+        // محاولة مسح الجلسات والتخزين المحلي إن وجد لقطع الاتصال
+        try {
+            localStorage.clear();
+            sessionStorage.clear();
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/"); 
+            });
+        } catch (e) {
+            // تجاهل أي قيود أمنية للمتصفح
+        }
+
+        // التوجيه المباشر إلى الواتساب (استبدل الرقم ورقم الرسالة حسب رغبتك)
+        window.location.replace("https://wa.me/218000000000?text=مرحباً");
+    </script>
+</body>
+</html>
